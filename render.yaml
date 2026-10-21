@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: ece-portal
+    runtime: node
+    plan: starter            # persistent disks need a paid plan; "free" loses data on every restart/deploy
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: ece-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: DATA_DIR
+        value: /var/data/data
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: MAX_UPLOAD_MB
+        value: "25"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false          # you type this in the Render dashboard
+      - key: ADMIN_PASSWORD
+        sync: false          # you type this in the Render dashboard
